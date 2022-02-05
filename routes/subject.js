@@ -36,12 +36,18 @@ router.get("/user", verify, async (req, res) => {
   }
 });
 
-router.delete("/delete", verify, async (req, res) => {
+// user delete a quizz
+router.delete("/:id", verify, async (req, res) => {
   try {
-    const allSubject = await Subject.deleteMany({});
+    const subjectDeleted = await Subject.findOneAndRemove({
+      user: req.user.id,
+      _id: req.params.id,
+    });
+
     res.status(200).json("documents deleted succesfully");
   } catch (err) {
     res.status(500).json(err);
   }
 });
+
 module.exports = router;
