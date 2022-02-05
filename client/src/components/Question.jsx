@@ -6,11 +6,9 @@ const Question = () => {
   const alphabet = ["A", "B", "C", "D", "E", "F", "G", "H"];
   const [isOpen, setOpen] = useState([]);
   const params = useParams();
-  console.log(params.id);
   const [questions, setQuestions] = useState([]);
   useEffect(() => {
     axios.get(`/question/${params.id}`).then((res) => {
-      console.log(res.data);
       setQuestions(res.data);
     });
   }, [params]);
