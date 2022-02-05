@@ -11,8 +11,6 @@ import Profile from "./components/Profile";
 
 import axios from "axios";
 
-axios.defaults.baseURL = "http://localhost:5000";
-
 function PrivateRoute() {
   return localStorage.getItem("token") ? <Outlet /> : <Login />;
 }
