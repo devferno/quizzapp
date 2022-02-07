@@ -25,9 +25,11 @@ const QuizzFeed = () => {
             key={index}
             width="full"
             style={{
-              border: "solid 1px #e3e3e3",
+              boxShadow: "5px 3px 20px #f1f1f1",
+              border: "1px solid #e3e3e3",
               padding: "15px",
               borderRadius: "6px",
+              background: "white",
             }}
           >
             <Image src={Back} w="full" />
@@ -45,7 +47,11 @@ const QuizzFeed = () => {
                 </Box>
               </Box>
 
-              <Button style={{ margin: "4px 0" }} alignSelf="flex-end">
+              <Button
+                style={{ margin: "4px 0" }}
+                colorScheme="orange"
+                alignSelf="flex-end"
+              >
                 <Link to={`/quizz/${i._id}`}>start quizz</Link>
               </Button>
             </Flex>

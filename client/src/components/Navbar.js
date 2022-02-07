@@ -36,7 +36,9 @@ const Navbar = () => {
           }}
         >
           <Box>
-            <Text>Quizzy</Text>
+            <Text fontWeight="700" cursor="pointer">
+              Quizzy
+            </Text>
           </Box>
 
           <Box
