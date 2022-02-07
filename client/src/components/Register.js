@@ -11,7 +11,7 @@ import { AtSignIcon } from "@chakra-ui/icons";
 import { FaUserAlt, FaLock } from "react-icons/fa";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const Register = () => {
   const [user, setUser] = useState({ name: "", email: "", password: "" });
@@ -25,10 +25,11 @@ const Register = () => {
   };
   return (
     <Box
+      width={{ base: "340px", md: "450px" }}
       style={{
         margin: "40px auto",
         padding: "20px",
-        width: "450px",
+
         border: "solid 1px #e3e3e3",
       }}
     >
@@ -82,6 +83,9 @@ const Register = () => {
           onChange={handleChange}
         />
       </InputGroup>
+      <Text color="blue.300">
+        Already have an account <Link to="/signin">sign in</Link>
+      </Text>
       <Button
         type="submit"
         style={{ margin: "15px 0" }}

@@ -26,10 +26,10 @@ const Login = () => {
   };
   return (
     <Box
+      width={{ base: "340px", md: "450px" }}
       style={{
         margin: "40px auto",
         padding: "20px",
-        width: "450px",
         border: "solid 1px #e3e3e3",
       }}
     >
