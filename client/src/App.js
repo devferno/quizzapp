@@ -10,7 +10,7 @@ import Question from "./components/Question";
 import Profile from "./components/Profile";
 
 function PrivateRoute() {
-  return localStorage.getItem("token") ? <Outlet /> : <Navigate to="/login" />;
+  return localStorage.getItem("token") ? <Outlet /> : <Navigate to="/signin" />;
 }
 
 function App() {
