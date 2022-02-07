@@ -21,7 +21,7 @@ const Register = () => {
   };
   const navigate = useNavigate();
   const registerUser = () => {
-    axios.post("/register", user).then((res) => navigate("/login"));
+    axios.post("/register", user).then((res) => navigate("/signin"));
   };
   return (
     <Box
