@@ -26,11 +26,12 @@ const Navbar = () => {
       ></Box>
       <Box style={{ width: "100%", borderBottom: "solid 1px #e3e3e3" }}>
         <Box
+          width={{ base: "95%", md: "70%" }}
           sx={{
             display: "flex",
             alignItems: "center",
             justifyContent: "space-between",
-            width: "90%",
+
             margin: "0 auto",
             padding: "15px 0",
           }}
@@ -65,26 +66,41 @@ const Navbar = () => {
             </li>
             <li>
               <Link to="/addquizz">
-                <Text>Add Quizz</Text>
+                <Text>add quizz</Text>
               </Link>
             </li>
-            <li>
-              <Link to="/signin">
-                <Text>Sign in</Text>
-              </Link>
-            </li>
-            <li>
-              <Link to="/register">
-                <Button colorScheme="teal">Register</Button>
-              </Link>
-            </li>
-            <li>
-              <Link to="/profile">
-                <Button>
-                  <FaUserAlt />
-                </Button>
-              </Link>
-            </li>
+            {!localStorage.getItem("token") && (
+              <>
+                <li>
+                  <Link to="/register">
+                    <Button color="black" variant="outline">
+                      sign up
+                    </Button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/signin">
+                    <Button colorScheme="teal">sign in</Button>
+                  </Link>
+                </li>
+              </>
+            )}
+            {localStorage.getItem("token") && (
+              <>
+                <li onClick={() => localStorage.removeItem("token")}>
+                  <Link to="/signin">
+                    <Button colorScheme="red">Deconnecter</Button>
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/profile">
+                    <Button>
+                      <FaUserAlt />
+                    </Button>
+                  </Link>
+                </li>
+              </>
+            )}
           </Box>
           <Menu className="menu" display={{ base: "block", md: "none" }}>
             <MenuButton

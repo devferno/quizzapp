@@ -26,7 +26,7 @@ const Login = () => {
   };
   return (
     <Box
-      width={{ base: "340px", md: "450px" }}
+      width={{ base: "300px", md: "450px" }}
       style={{
         margin: "40px auto",
         padding: "20px",

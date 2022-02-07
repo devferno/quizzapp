@@ -8,6 +8,7 @@ const QuizzFeed = () => {
   const [quizz, setQuizz] = useState([]);
   useEffect(() => {
     axios.get("/subject").then((res) => {
+      console.log(res.data);
       setQuizz(res.data);
     });
   }, []);
@@ -15,7 +16,6 @@ const QuizzFeed = () => {
   return (
     <Box
       style={{
-        width: "90%",
         margin: "40px auto",
       }}
     >
@@ -35,7 +35,7 @@ const QuizzFeed = () => {
             <Image src={Back} w="full" />
             <Flex flexDirection="column">
               <Box>
-                <Text fontSize="3xl" margin="10px 0" fontWeight="700">
+                <Text fontSize="2xl" margin="10px 0" fontWeight="700">
                   {i.title.toUpperCase()}
                 </Text>
                 <Box margin="10px 0">
@@ -51,6 +51,7 @@ const QuizzFeed = () => {
                 style={{ margin: "4px 0" }}
                 colorScheme="orange"
                 alignSelf="flex-end"
+                justifySelf="end"
               >
                 <Link to={`/quizz/${i._id}`}>start quizz</Link>
               </Button>
