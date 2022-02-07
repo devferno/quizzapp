@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { Box, SimpleGrid, Button, Stack } from "@chakra-ui/react";
+import { Box, SimpleGrid, Button, Flex, Image } from "@chakra-ui/react";
 import { Badge, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-
+import Back from "../back.jpg";
 const QuizzFeed = () => {
   const [quizz, setQuizz] = useState([]);
   useEffect(() => {
@@ -26,23 +26,29 @@ const QuizzFeed = () => {
             width="full"
             style={{
               border: "solid 1px #e3e3e3",
-              padding: "20px",
+              padding: "15px",
+              borderRadius: "6px",
             }}
           >
-            <Stack>
+            <Image src={Back} w="full" />
+            <Flex flexDirection="column">
               <Box>
-                <Text>{i.title}</Text>
-
-                {i.category.map((item, ind) => (
-                  <Badge key={ind} style={{ margin: "0 8px" }}>
-                    {item}
-                  </Badge>
-                ))}
+                <Text fontSize="3xl" margin="10px 0" fontWeight="700">
+                  {i.title.toUpperCase()}
+                </Text>
+                <Box margin="10px 0">
+                  {i.category.map((item, ind) => (
+                    <Badge key={ind} style={{ margin: "0 8px" }}>
+                      {item}
+                    </Badge>
+                  ))}
+                </Box>
               </Box>
-              <Link to={`/quizz/${i._id}`}>
-                <Button>start quizz</Button>
-              </Link>
-            </Stack>
+
+              <Button style={{ margin: "4px 0" }} alignSelf="flex-end">
+                <Link to={`/quizz/${i._id}`}>start quizz</Link>
+              </Button>
+            </Flex>
           </Box>
         ))}
       </SimpleGrid>

@@ -1,4 +1,4 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import Footer from "./components/Footer";
 import Navbar from "./components/Navbar";
 import Register from "./components/Register";
@@ -9,10 +9,8 @@ import QuizzFeed from "./components/QuizzFeed";
 import Question from "./components/Question";
 import Profile from "./components/Profile";
 
-import axios from "axios";
-
 function PrivateRoute() {
-  return localStorage.getItem("token") ? <Outlet /> : <Login />;
+  return localStorage.getItem("token") ? <Outlet /> : <Navigate to="/login" />;
 }
 
 function App() {
