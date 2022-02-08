@@ -8,6 +8,7 @@ import {
   Button,
   Stack,
   FormControl,
+  Image,
   Divider,
 } from "@chakra-ui/react";
 import { category, alphabet, createArray, getCategory } from "../common";
@@ -22,7 +23,7 @@ const AddQuestion = () => {
   const [questions, setQuestions] = useState([]);
   const [subject, setSubject] = useState({ title: "", category: [] });
   const [image, setImage] = useState("");
-
+  const [previewImage, setPreviewImage] = useState();
   //add question field
   const addQuestion = () => {
     setQuestions((prev) => [
@@ -67,6 +68,13 @@ const AddQuestion = () => {
 
   const navigate = useNavigate();
 
+  //handle image change
+  const handleImage = (e) => {
+    setImage(e.target.files[0]);
+    const img = URL.createObjectURL(e.target.files[0]);
+    setPreviewImage(img);
+  };
+
   //submit the quizz to the backend
   const SubmitQuizz = () => {
     const formData = new FormData();
@@ -87,6 +95,10 @@ const AddQuestion = () => {
       });
   };
 
+  const SkeletonImage = () => {
+    return <Box width="100%" height="200px" background="grey"></Box>;
+  };
+
   return (
     <Box
       style={{
@@ -99,8 +111,43 @@ const AddQuestion = () => {
       <Text fontSize="4xl" style={{ margin: "20px 0", textAlign: "center" }}>
         Add Your Quizz
       </Text>
-      <Box>
-        <Input type="file" onChange={(e) => setImage(e.target.files[0])} />
+      {previewImage ? (
+        <Image
+          src={previewImage}
+          alt=""
+          maxHeight="300px"
+          objectFit="cover"
+          width="100%"
+        />
+      ) : (
+        <SkeletonImage />
+      )}
+      <Box position="relative">
+        <Text
+          fontSize="xl"
+          textAlign="center"
+          width="full"
+          borderRadius="8px"
+          margin="5px 0"
+          background="#e3e3e3"
+          padding="10px"
+        >
+          {previewImage ? "change image" : "set image"}
+        </Text>
+        <Input
+          height="full"
+          type="file"
+          width="full"
+          style={{
+            top: "0%",
+            left: 0,
+            opacity: 0,
+            position: "absolute",
+            zIndex: 2,
+            cursor: "pointer",
+          }}
+          onChange={handleImage}
+        />
       </Box>
 
       <InputGroup style={{ margin: "10px 0px" }}>
