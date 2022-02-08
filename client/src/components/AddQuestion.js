@@ -8,59 +8,50 @@ import {
   Button,
   Stack,
   FormControl,
+  Divider,
 } from "@chakra-ui/react";
+import { category, alphabet, createArray, getCategory } from "../common";
 import { Select } from "chakra-react-select";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { Divider } from "@chakra-ui/react";
 import { MdTitle } from "react-icons/md";
 import { SiVerizon } from "react-icons/si";
+
 const AddQuestion = () => {
-  const alph = ["A", "B", "C", "D", "E", "F", "G", "H"];
+  //all states
   const [questions, setQuestions] = useState([]);
   const [subject, setSubject] = useState({ title: "", category: [] });
+  const [image, setImage] = useState("");
+
+  //add question field
   const addQuestion = () => {
     setQuestions((prev) => [
       ...prev,
       { question: "", choices: [""], response: "" },
     ]);
   };
-  const category = [
-    "programming",
-    "php",
-    "web",
-    "frontend",
-    "backend",
-    "java",
-    "react",
-    "oracle",
-  ];
+
+  //handle select category
   const handleSelectChange = (event) => {
     setSubject((prev) => ({ ...prev, category: getCategory(event) }));
   };
-  const createArray = (arr) => {
-    let output = [];
-    arr.forEach((item) => output.push({ label: item, value: item }));
-    return output;
-  };
-  const getCategory = (arr) => {
-    let output = [];
-    arr.forEach((item) => output.push(item.value));
-    return output;
-  };
 
+  //add Choice field
   const addChoice = (e, i) => {
     const newquestions = [...questions];
     newquestions[i].choices = [...questions[i].choices, ""];
-
     setQuestions(newquestions);
   };
+
+  //handle change of subject items
   const handleSubject = (e) => {
     setSubject((prev) => ({
       ...prev,
       title: e.target.value,
     }));
   };
+
+  //handle change of questions items
   const handleChange = (e, index, indice) => {
     const { name, value } = e.target;
     const newquestion = [...questions];
@@ -73,18 +64,29 @@ const AddQuestion = () => {
     }
     setQuestions(newquestion);
   };
+
   const navigate = useNavigate();
+
+  //submit the quizz to the backend
   const SubmitQuizz = () => {
+    const formData = new FormData();
+    formData.append("image", image);
+    formData.append("title", subject.title);
+    formData.append("category", subject.category);
     axios
-      .post("/subject", subject, {
-        headers: { authorization: localStorage.getItem("token") },
+      .post("/subject", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          authorization: localStorage.getItem("token"),
+        },
       })
       .then((res) => {
         axios
           .post(`/question/${res.data}`, questions)
-          .then((re) => navigate("/"));
+          .then((res) => navigate("/"));
       });
   };
+
   return (
     <Box
       style={{
@@ -97,6 +99,10 @@ const AddQuestion = () => {
       <Text fontSize="4xl" style={{ margin: "20px 0", textAlign: "center" }}>
         Add Your Quizz
       </Text>
+      <Box>
+        <Input type="file" onChange={(e) => setImage(e.target.files[0])} />
+      </Box>
+
       <InputGroup style={{ margin: "10px 0px" }}>
         <InputLeftElement
           pointerEvents="none"
@@ -148,7 +154,7 @@ const AddQuestion = () => {
                 pointerEvents="none"
                 color="gray.300"
                 fontSize="1.2em"
-                children={alph[I]}
+                children={alphabet[I]}
               />
               <Input
                 name="choice"

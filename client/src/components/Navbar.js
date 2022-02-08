@@ -88,7 +88,10 @@ const Navbar = () => {
             {localStorage.getItem("token") && (
               <>
                 <li onClick={() => localStorage.removeItem("token")}>
-                  <Link to="/signin">
+                  <Link
+                    to="/signin"
+                    onClick={() => (window.location = "/signin")}
+                  >
                     <Button colorScheme="red">Deconnecter</Button>
                   </Link>
                 </li>

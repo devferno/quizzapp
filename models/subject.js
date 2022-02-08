@@ -9,6 +9,10 @@ const subjectSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  image: {
+    data: Buffer,
+    contentType: String,
+  },
 });
 
 module.exports = mongoose.model("Subject", subjectSchema);

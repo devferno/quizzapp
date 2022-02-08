@@ -1,16 +1,49 @@
 const router = require("express").Router();
 const verify = require("../middlewares/verifiy");
 const Subject = require("../models/subject");
+const multer = require("multer");
+const fs = require("fs");
+const path = require("path");
 
-router.post("/", verify, async (req, res) => {
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.fieldname + "-" + Date.now());
+  },
+});
+
+const uploads = multer({ storage: storage });
+
+router.post("/", verify, uploads.single("image"), async (req, res) => {
   try {
     const { title, category } = req.body;
-    const newSubject = await new Subject({
+
+    const newSubject = {
       title,
-      category,
+      category: JSON.stringify(category).split(","),
       user: req.user.id,
+      image: {
+        data: fs.readFileSync(
+          path.join(
+            "C:/Users/HP/Desktop/30Code/quizzapp/server/" +
+              "/uploads/" +
+              req.file.filename
+          )
+        ),
+        contentType: "image/png",
+      },
+    };
+
+    Subject.create(newSubject, (err, item) => {
+      if (err) {
+        res.status(455).json(err);
+      } else {
+        item.save();
+        res.status(200).json(item._id);
+      }
     });
-    await newSubject.save().then(() => res.status(200).json(newSubject.id));
   } catch (err) {
     res.status(500).json(err);
   }
@@ -19,7 +52,6 @@ router.post("/", verify, async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const allSubject = await Subject.find({});
-
     res.status(200).json(allSubject);
   } catch (err) {
     res.status(500).json("error server");

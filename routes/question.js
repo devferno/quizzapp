@@ -4,6 +4,7 @@ const verify = require("../middlewares/verifiy");
 
 router.post("/:id", async (req, res) => {
   try {
+    console.log(req.params);
     req.body.forEach(async (item) => {
       const { question, choices, response } = item;
 
@@ -30,6 +31,5 @@ router.get("/:id", async (req, res) => {
     res.status(500).json("error server");
   }
 });
-
 
 module.exports = router;

@@ -3,7 +3,8 @@ import { Box, SimpleGrid, Button, Flex, Image } from "@chakra-ui/react";
 import { Badge, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import Back from "../back.jpg";
+import { Buffer } from "Buffer";
+
 const QuizzFeed = () => {
   const [quizz, setQuizz] = useState([]);
   useEffect(() => {
@@ -32,7 +33,12 @@ const QuizzFeed = () => {
               background: "white",
             }}
           >
-            <Image src={Back} w="full" />
+            <Image
+              src={`data:${i.image.contentType};base64,${Buffer.from(
+                i.image.data.data
+              ).toString("base64")}`}
+              w="full"
+            />
             <Flex flexDirection="column">
               <Box>
                 <Text fontSize="2xl" margin="10px 0" fontWeight="700">

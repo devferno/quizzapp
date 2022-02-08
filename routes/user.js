@@ -2,11 +2,12 @@ const router = require("express").Router();
 const User = require("../models/user.js");
 const verify = require("../middlewares/verifiy");
 
+//get the connected user
 router.get("/", verify, async (req, res) => {
   try {
     const users = await User.find({ _id: req.user.id });
-    const { name, email } = users[0];
-    res.status(200).json({ name, email });
+    const { name, email, profileImage, coverImage } = users[0];
+    res.status(200).json({ name, email, profileImage, coverImage });
   } catch (err) {
     res.status(500).json(err);
   }
