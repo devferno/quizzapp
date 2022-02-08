@@ -22,7 +22,7 @@ router.post("/", verify, uploads.single("image"), async (req, res) => {
 
     const newSubject = {
       title,
-      category: JSON.stringify(category).split(","),
+      category: category.split(","),
       user: req.user.id,
       image: {
         data: fs.readFileSync(
