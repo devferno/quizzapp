@@ -3,18 +3,10 @@ const verify = require("../middlewares/verifiy");
 const Subject = require("../models/subject");
 const multer = require("multer");
 const fs = require("fs");
+const multerImage = require("../middlewares/multerImage");
 const path = require("path");
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads");
-  },
-  filename: (req, file, cb) => {
-    cb(null, file.fieldname + "-" + Date.now());
-  },
-});
-
-const uploads = multer({ storage: storage });
+const { uploads } = multerImage;
 
 router.post("/", verify, uploads.single("image"), async (req, res) => {
   try {
