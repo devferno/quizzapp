@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Back from "../back.jpg";
+import { Buffer } from "Buffer";
 import {
   Box,
   Stack,
@@ -15,17 +16,9 @@ import {
 const Profile = () => {
   const [user, setUser] = useState({});
   const [subjects, setSubjects] = useState([]);
-  const [images, setImages] = useState({});
   const [profileImage, setProfile] = useState();
   const [coverImage, setCover] = useState();
-
-  //handleImageChange
-  const handleImageChange = (event) => {
-    const { label } = event.target;
-    console.log(event.target);
-    setImages((prev) => ({ ...prev, [label]: event.target.files[0] }));
-    console.log(images);
-  };
+  const [previewImage, setPreviewImage] = useState();
 
   //delete a quizz
   const handleDelete = (event, id) => {
@@ -37,21 +30,37 @@ const Profile = () => {
       .then((res) => console.log(res.data));
   };
 
+  //handle the preview image
+  const handlePreviewImage = (e) => {
+    setCover(e.target.files[0]);
+    const file = URL.createObjectURL(e.target.files[0]);
+    setPreviewImage(file);
+  };
+
   //upload image
   const updateCover = () => {
     const formData = new FormData();
     formData.append("cover", coverImage);
 
     axios
-      .post("/upload-profile", formData)
-      .then((res) => console.log(res.data));
+      .post("/user/upload-cover", formData, {
+        headers: {
+          "content-type": "multipart/form-data",
+          authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => setPreviewImage());
   };
 
   const updateProfile = () => {
     const formData = new FormData();
     formData.append("profile", profileImage);
 
-    axios.post("/upload-cover", formData).then((res) => console.log(res.data));
+    axios
+      .post("/user/upload-profile", formData, {
+        headers: { "content-type": "multipart/form-data" },
+      })
+      .then((res) => console.log(res.data));
   };
 
   useEffect(() => {
@@ -59,8 +68,12 @@ const Profile = () => {
       .get("/user", {
         headers: { authorization: localStorage.getItem("token") },
       })
-      .then((res) => setUser(res.data));
+      .then((res) => {
+        console.log(res.data);
+        setUser(res.data);
+      });
     axios
+
       .get("/subject/user", {
         headers: { authorization: localStorage.getItem("token") },
       })
@@ -70,13 +83,34 @@ const Profile = () => {
     <Box width={{ md: "96%" }} margin="0 auto">
       <Box position="relative" mb="58px">
         <Image
-          src={Back}
+          src={
+            previewImage
+              ? previewImage
+              : user["coverImage"]
+              ? `data:/image/png;base64,${Buffer.from(
+                  user["coverImage"].data.data
+                ).toString("base64")}`
+              : Back
+          }
           alt=""
           width="100%"
           height="200px"
           objectFit="cover"
         />
 
+        {previewImage ? (
+          <Box position="absolute" top="0" right="0%">
+            <Text
+              cursor="pointer"
+              borderRadius="8px"
+              bgColor="green.400"
+              margin="10px 0"
+              onClick={updateCover}
+            >
+              Save Changes
+            </Text>
+          </Box>
+        ) : null}
         <Box
           className="changeCoverImage"
           position="absolute"
@@ -86,8 +120,8 @@ const Profile = () => {
           <Text
             fontSixe="xl"
             borderRadius="8px"
-            height="100%"
             bgColor="#e3e3e3"
+            height="100%"
             padding="8px"
           >
             Change Cover
@@ -101,9 +135,10 @@ const Profile = () => {
             left="-10%"
             top="0%"
             label="cover"
-            onChange={(e) => setCover(e.target.files[0])}
+            onChange={handlePreviewImage}
           />
         </Box>
+
         <Avatar
           position="absolute"
           bottom="-25%"

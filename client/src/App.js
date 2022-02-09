@@ -10,6 +10,10 @@ import QuizzFeed from "./components/QuizzFeed";
 import Question from "./components/Question";
 import Profile from "./components/Profile";
 
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:5000";
+
 function PrivateRoute() {
   return localStorage.getItem("token") ? <Outlet /> : <Navigate to="/signin" />;
 }
