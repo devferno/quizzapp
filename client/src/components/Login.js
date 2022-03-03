@@ -21,8 +21,7 @@ const Login = () => {
   const loginUser = () => {
     axios.post("/login", user).then((res) => {
       localStorage.setItem("token", res.data.token);
-      navigate("/profile");
-      window.location = "/profile";
+      navigate("/addquizz");
     });
   };
   return (

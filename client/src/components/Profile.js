@@ -10,15 +10,15 @@ import {
   SimpleGrid,
   Button,
   Image,
-  Avatar,
   Input,
 } from "@chakra-ui/react";
+import { BsFillPencilFill } from "react-icons/bs";
 const Profile = () => {
   const [user, setUser] = useState({});
   const [subjects, setSubjects] = useState([]);
   const [profileImage, setProfile] = useState();
   const [coverImage, setCover] = useState();
-  const [previewImage, setPreviewImage] = useState();
+  const [previewImage, setPreviewImage] = useState({});
 
   //delete a quizz
   const handleDelete = (event, id) => {
@@ -34,7 +34,7 @@ const Profile = () => {
   const handlePreviewImage = (e) => {
     setCover(e.target.files[0]);
     const file = URL.createObjectURL(e.target.files[0]);
-    setPreviewImage(file);
+    setPreviewImage((prev) => ({ ...prev, cover: file }));
   };
 
   //upload image
@@ -49,7 +49,7 @@ const Profile = () => {
           authorization: localStorage.getItem("token"),
         },
       })
-      .then((res) => setPreviewImage());
+      .then((res) => setPreviewImage((prev) => ({ ...prev, cover: "" })));
   };
 
   const updateProfile = () => {
@@ -58,7 +58,10 @@ const Profile = () => {
 
     axios
       .post("/user/upload-profile", formData, {
-        headers: { "content-type": "multipart/form-data" },
+        headers: {
+          "content-type": "multipart/form-data",
+          authorization: localStorage.getItem("token"),
+        },
       })
       .then((res) => console.log(res.data));
   };
@@ -78,14 +81,15 @@ const Profile = () => {
         headers: { authorization: localStorage.getItem("token") },
       })
       .then((res) => setSubjects(res.data));
-  }, []);
+  }, [previewImage]);
+
   return (
     <Box width={{ md: "96%" }} margin="0 auto">
       <Box position="relative" mb="58px">
         <Image
           src={
-            previewImage
-              ? previewImage
+            previewImage.cover
+              ? previewImage.cover
               : user["coverImage"]
               ? `data:/image/png;base64,${Buffer.from(
                   user["coverImage"].data.data
@@ -118,7 +122,7 @@ const Profile = () => {
           right="0%"
         >
           <Text
-            fontSixe="xl"
+            fontSize="xl"
             borderRadius="8px"
             bgColor="#e3e3e3"
             height="100%"
@@ -139,12 +143,48 @@ const Profile = () => {
           />
         </Box>
 
-        <Avatar
+        <Image
           position="absolute"
           bottom="-25%"
           width="100px"
           height="100px"
+          rounded="100%"
+          ring="100%"
+          src={
+            previewImage.profile
+              ? previewImage.profile
+              : user["coverImage"]
+              ? `data:/image/png;base64,${Buffer.from(
+                  user["coverImage"].data.data
+                ).toString("base64")}`
+              : Back
+          }
         />
+        <Box>
+          <Button onClick={updateProfile}>done</Button>
+        </Box>
+        <Box position="absolute" bottom="-25%" width="24px" left="10%">
+          <BsFillPencilFill fontSize="24px" />
+          <Input
+            width="100%"
+            height="100%"
+            opacity={0}
+            position="absolute"
+            left="0"
+            top="0"
+            zIndex={2}
+            type="file"
+            name="profile"
+            label="profile"
+            onChange={(e) => {
+              setProfile(e.target.files[0]);
+              setPreviewImage((prev) => ({
+                ...prev,
+                profile: URL.createObjectURL(e.target.files[0]),
+              }));
+            }}
+          />
+        </Box>
       </Box>
       <Text> name </Text>
       <Text fontSize="3xl">{user.name}</Text>
@@ -167,6 +207,7 @@ const Profile = () => {
                   <Badge key={ke}>{cat}</Badge>
                 ))}
               </Box>
+
               <Button
                 colorScheme="red"
                 onClick={(event) => handleDelete(event, item._id)}
