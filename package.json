@@ -4,16 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "client-install":"npm install --cwd client",
+    "client-install": "npm install --cwd client",
     "server": "nodemon index.js",
     "dev": "concurrently \"yarn start client\" \"yarn start index\"",
-    "client":"yarn start --cwd client",
+    "client": "yarn start --cwd client",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false yarn --cwd client install && yarn --cwd client build"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "Buffer": "^0.0.0",
     "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "dotenv": "^14.2.0",
