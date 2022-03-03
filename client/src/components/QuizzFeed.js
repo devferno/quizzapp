@@ -3,7 +3,7 @@ import { Box, SimpleGrid, Button, Flex, Image } from "@chakra-ui/react";
 import { Badge, Text } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { Buffer } from "Buffer";
+import { Buffer } from "buffer";
 
 const QuizzFeed = () => {
   const [quizz, setQuizz] = useState([]);
