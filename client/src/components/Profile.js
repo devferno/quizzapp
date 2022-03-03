@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import Back from "../back.jpg";
-import { Buffer } from "Buffer";
+import { Buffer } from "buffer";
 import {
   Box,
   Stack,
